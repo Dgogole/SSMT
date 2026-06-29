@@ -1,0 +1,20 @@
+# --- 忽略 Python 缓存 ---
+**/__pycache__/
+*.pyc
+__pycache__/
+/.claude
+/.codex
+/.agents
+**/build/
+**/_reference
+/_reference
+/_reference/
+# 临时存储
+files/
+tmp.py
+scripts/visualize
+# ckpt
+/experiments/
+# ignore
+/Manifold
+/chamfer_dist

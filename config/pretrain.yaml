@@ -1,0 +1,20 @@
+optimizer: { type: AdamW, kwargs: { lr: 0.0001, weight_decay: 0.05 } }
+
+scheduler: { type: CosLR, kwargs: { epochs: 500, initial_epochs: 20 } }
+
+dataset : {
+  train : { NAME: teethDataset,
+            train: True,
+            file: /data/dtl/workspace/SSMT/data/pretrain/train.txt,
+            },
+  val : { NAME: teethDataset,
+          train: False,
+          file: /data/dtl/workspace/SSMT/data/pretrain/val.txt,},
+  test : {  NAME: teethDataset,
+            train: False,
+            file: /data/dtl/workspace/SSMT/data/pretrain/test.txt,}}
+
+npoints: 512
+total_bs: 512
+step_per_update: 1
+max_epoch: 500

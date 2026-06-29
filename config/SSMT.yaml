@@ -1,0 +1,72 @@
+optimizer: { type: AdamW, kwargs: { lr: 0.00015, weight_decay: 0.05 } }
+
+scheduler: { type: CosLR, kwargs: { epochs: 500, initial_epochs: 10 } }
+
+dataset : {
+  train : { NAME: DentalDataset,
+            train: True,
+            dataroot: /data/dtl/multimodal_teeth_dataset/remesh_before,  
+            paramroot: /data/dtl/multimodal_teeth_dataset/rotation_matrix,
+            before_path: /data/dtl/multimodal_teeth_dataset/pcd_before,
+            after_path: /data/dtl/multimodal_teeth_dataset/pcd_after,
+            text_feature_path: /data/dtl/multimodal_text_embedding_feature,
+            npoint: 512,
+            file: /data/dtl/workspace/SSMT/data/tadpm/train_stratified.txt,
+            },
+  val : { NAME: DentalDataset,
+            train: True,
+            dataroot: /data/dtl/multimodal_teeth_dataset/remesh_before,  
+            paramroot: /data/dtl/multimodal_teeth_dataset/rotation_matrix,
+            before_path: /data/dtl/multimodal_teeth_dataset/pcd_before,
+            after_path: /data/dtl/multimodal_teeth_dataset/pcd_after,
+            text_feature_path: /data/dtl/multimodal_text_embedding_feature,
+            npoint: 512,
+            file: /data/dtl/workspace/SSMT/data/tadpm/val_stratified.txt,
+            },
+  test : { NAME: DentalDataset,
+            train: True,
+            dataroot: /data/dtl/multimodal_teeth_dataset/remesh_before,  
+            paramroot: /data/dtl/multimodal_teeth_dataset/rotation_matrix,
+            before_path: /data/dtl/multimodal_teeth_dataset/pcd_before,
+            after_path: /data/dtl/multimodal_teeth_dataset/pcd_after,
+            text_feature_path: /data/dtl/multimodal_text_embedding_feature,
+            npoint: 512,
+            file: /data/dtl/workspace/SSMT/data/tadpm/test_stratified.txt,
+            }}
+
+model:
+  {
+    NAME: SSMT,
+    # MulT-style multimodal fusion config
+    # Cross-Attention: main modality as K/V, secondary modality as Q
+    text_input_dim: 768,
+    text_dim: 1024,
+    text_depth: 2,
+    text_num_heads: 8,
+    mesh_encoder_dim: 768,
+    mesh_feat_dim: 1024,
+    mesh_depth: 2,
+    mesh_num_heads: 8,
+    pointnet_output_dim: 1024,
+    global_dim: 1024,
+    pointnet_depth: 2,
+    pointnet_num_heads: 8,
+    cross_attn_num_heads: 16,
+    self_attn_num_heads: 16,
+    deep_fusion_depth: 1,
+    attn_dropout: 0.1,
+    final_dim: 1024,
+    debug: False,
+    debug_stats: True,
+    debug_max_forwards: 2,
+    debug_rank0_only: True,
+    debug_check_finite: False,
+  }
+
+npoints: 512
+total_bs: 16
+step_per_update: 1
+max_epoch: 500
+loss:
+  collision_lambda: 0.05
+  collision_eps: 1.0e-6
